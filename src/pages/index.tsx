@@ -9,10 +9,21 @@ import { api } from '../services/api';
 import { Loading } from '../components/Loading';
 import { Error } from '../components/Error';
 
+interface ImagesData {
+  after: string;
+  data: {
+    description: string;
+    id: string;
+    title: string;
+    ts: number;
+    url: string;
+  }[];
+}
+
 export default function Home(): JSX.Element {
   const [hasMorePages, setHasMorePages] = useState(false);
 
-  const fetchImages = async ({ pageParam = 0 }): Promise<any> => {
+  const fetchImages = async ({ pageParam = null }): Promise<ImagesData> => {
     const response = await api.get('/api/images', {
       params: {
         after: pageParam,
@@ -33,18 +44,14 @@ export default function Home(): JSX.Element {
   });
 
   const formattedData = useMemo(() => {
-    if (data?.pages) {
-      setHasMorePages(hasNextPage);
-      const formatted = data.pages
-        .map(page => {
-          return page.data.map(register => {
-            return register;
-          });
-        })
-        .flat();
-
-        return formatted;
-      } 
+    setHasMorePages(hasNextPage);
+    return data?.pages
+      .map(page => {
+        return page.data.map(register => {
+          return register;
+        });
+      })
+      .flat();
   }, [data, hasNextPage]);
 
   if (isLoading) {

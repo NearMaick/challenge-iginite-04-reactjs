@@ -16,13 +16,10 @@ interface CardsProps {
 }
 
 export function CardList({ cards }: CardsProps): JSX.Element {
-  // TODO MODAL USEDISCLOSURE
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  // TODO SELECTED IMAGE URL STATE
   const [imageSelected, setImageSelected] = useState('');
 
-  // TODO FUNCTION HANDLE VIEW IMAGE
   function viewImage(url: string): void {
     onOpen();
     setImageSelected(url);
